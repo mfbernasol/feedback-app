@@ -19,6 +19,11 @@
       "rating": "9",
       "text": "New feedback item",
       "id": 5
+    },
+    {
+      "text": "this is a test",
+      "rating": 5,
+      "id": 6
     }
   ]
 }

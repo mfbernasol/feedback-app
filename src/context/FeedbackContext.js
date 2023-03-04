@@ -1,4 +1,3 @@
-
 import { createContext, useState, useEffect } from 'react';
 import userEvent from '@testing-library/user-event';
 
@@ -29,8 +28,10 @@ export const FeedbackProvider = ({ children }) => {
   };
 
   //delete feedback
-  const deleteFeedback = (id) => {
+  const deleteFeedback = async (id) => {
     if (window.confirm('Are you sure you want to delete?')) {
+      await fetch(`/feedback/${id}`, { method: 'DELETE' });
+
       setFeedback(feedback.filter((item) => item.id !== id));
     }
   };
@@ -40,18 +41,28 @@ export const FeedbackProvider = ({ children }) => {
     const response = await fetch('/feedback', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newFeedback)
-    })
-    const data = await response.json()
+      body: JSON.stringify(newFeedback),
+    });
+    const data = await response.json();
     setFeedback([data, ...feedback]);
   };
 
   // Update feedback item
-  const updateFeedback = (id, updItem) => {
+  const updateFeedback = async (id, updItem) => {
+    const response = await fetch(`/feedback/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updItem),
+    });
+
+    const data = await response.json();
+
     setFeedback(
-      feedback.map((item) => (item.id === id ? { ...item, ...updItem } : item))
+      feedback.map((item) => (item.id === id ? { ...item, ...data } : item))
     );
   };
 
